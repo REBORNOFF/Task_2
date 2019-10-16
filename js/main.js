@@ -1,8 +1,8 @@
 window.addEventListener("DOMContentLoaded", function() {
     "use strict";
-    let tab = document.querySelectorAll(".info-header-tab"),
-        info = document.querySelector(".info-header"),
-        tabContent = document.querySelectorAll(".info-tabcontent");
+    let tab = document.querySelectorAll(".info-header-tab"), //Buttons
+        info = document.querySelector(".info-header"), //Wrapper
+        tabContent = document.querySelectorAll(".info-tabcontent"); //Blogs
 
     function hideTabContent(a) {
         for(let i = a; i < tabContent.length; i++) {
@@ -62,10 +62,21 @@ window.addEventListener("DOMContentLoaded", function() {
             timerInterval = setInterval(updateClock, 1000);
 
         function updateClock () {
-            let t = getTimeRemaining(endtime);
-            hours.textContent = t.hours;
-            minutes.textContent = t.minutes;
-            seconds.textContent = t.seconds;
+            //
+            //Получаем все данные о времени и вызывая каждый раз
+            //getTimeRemaining(endtime) мы получаем актуальные данные 
+            //
+            let t = getTimeRemaining(endtime); 
+
+                function addZero(num) {
+                    if(num <= 9) {
+                        return "0" + num;
+                    } else return num;
+                };
+
+            hours.textContent = addZero(t.hours);
+            minutes.textContent = addZero(t.minutes);
+            seconds.textContent = addZero(t.seconds);
 
             if(t.total <= 0) {
                 clearInterval(timerInterval);
