@@ -16,7 +16,7 @@ window.addEventListener("DOMContentLoaded", function() {
     function showTabContent(b) {
         if(tabContent[b].classList.contains("hide")) {
             tabContent[b].classList.remove("hide");
-            tabContent[b].classList.add("show");
+            tabContent[b].classList.add("show");   
         }
     }
 
@@ -32,10 +32,10 @@ window.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
-
+    
     //Timer
 
-    let deadLine = "2019-10-21";
+    let deadLine = "2019-11-21";
 
     function getTimeRemaining(endtime) {
         let t = Date.parse(endtime) - Date.parse(new Date()),
@@ -88,4 +88,34 @@ window.addEventListener("DOMContentLoaded", function() {
     }
 
     setClock("timer", deadLine);
+
+    //Modal window
+
+    let more = document.querySelector(".more"),
+        overlay = document.querySelector(".overlay"),
+        close = document.querySelector(".popup-close"),
+        popup = document.querySelector('.popup'),
+        description = document.querySelectorAll(".description-btn");
+
+    more.addEventListener("click", function() {
+        overlay.style.display = "block";
+        this.classList.add("more-splash");
+        document.body.style.overflow = "hidden";
+    });
+
+    close.addEventListener("click", function() {
+        overlay.style.display = "none";
+        more.classList.remove("more-splash");
+        document.body.style.overflow = "";
+    });
+
+    description.forEach(function(item) {
+        item.addEventListener("click", function() {
+            overlay.style.display = "block";
+            overlay.classList.add("fade");
+            popup.classList.add("more-splash");
+            document.body.style.overflow = "hidden";
+        });
+    });
+
 });
