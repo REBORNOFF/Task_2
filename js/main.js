@@ -119,37 +119,78 @@ window.addEventListener("DOMContentLoaded", function() {
     });
 
     //Form
-
     let massage = {
         loading: "Загрузка",
         success: "Спасибо! Скоро Мы с Вами свяжемся!",
         failure: "Что-то пошло не так.."
     };
 
-    let form = document.querySelector(".main-form"),
-        input = form.getElementsByTagName("input"),
-        statusMessage = document.createElement("div");
+    function sendModalForm() {
+        let form = document.querySelector(".main-form"),
+            input = form.getElementsByTagName("input"),
+            statusMessage = document.createElement("div");
+
+            statusMessage.classList.add("status");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            form.appendChild(statusMessage);
+
+            let request = new XMLHttpRequest();
+            request.open("POST", "server.php");
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            let formData = new FormData(form);
+            request.send(formData); // если отправляем json, указать переменную json
+
+            //Для JSON 
+            //let obj = {};
+            // formData.forEach(function(value, key) {
+            //     obj[key] = value;
+            // });
+            // let json = JSON.stringify(obj);
+
+            request.addEventListener("readystatechange", function() {
+                if (request.readyState < 4) {
+                    statusMessage.innerHTML = massage.loading;
+                } else if (request.readyState === 4 && request.status == 200) {
+                    statusMessage.innerHTML = massage.success;
+                } else {
+                    statusMessage.innerHTML = massage.failure;
+                }
+            });
+
+                for (let i = 0; i < input.length; i++) {
+                    input[i].value = "";
+                }
+        });
+    }
+    sendModalForm();
+
+    function sendMainForm() {
+        let form = document.querySelector("#form"),
+            input = form.getElementsByTagName("input"),
+            statusMessage = document.createElement("div");
 
         statusMessage.classList.add("status");
-
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        form.appendChild(statusMessage);
-
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            form.appendChild(statusMessage);
+        
+        //Создаём запрос
         let request = new XMLHttpRequest();
         request.open("POST", "server.php");
-        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
 
         let formData = new FormData(form);
-        request.send(formData); // если отправляем json, указать переменную json
 
-        //Для JSON 
-        //let obj = {};
-        // formData.forEach(function(value, key) {
-        //     obj[key] = value;
-        // });
-        // let json = JSON.stringify(obj);
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
 
+         let json = JSON.stringify(obj);
+        request.send(json);
         request.addEventListener("readystatechange", function() {
             if (request.readyState < 4) {
                 statusMessage.innerHTML = massage.loading;
@@ -160,8 +201,10 @@ window.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-            for (let i = 0; i < input.length; i++) {
+            for(let i = 0; i < input.length; i++) {
                 input[i].value = "";
             }
-    });
+        });
+    }
+    sendMainForm();
 });
