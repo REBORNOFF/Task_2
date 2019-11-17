@@ -261,5 +261,58 @@ window.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    //calc
+    let persons = document.querySelectorAll(".counter-block-input")[0],
+        restDays = document.querySelectorAll(".counter-block-input")[1],
+        place = document.getElementById("select"),
+        totalValue = document.getElementById("total"), //Общая сумма поездки
+        personsSum = 0, //Кол-во людей
+        daysSum = 0,
+        //Самое последнее значение, после всех математических операций
+        total = 0; 
+
+    totalValue.innerHTML = 0;
+
+    persons.addEventListener("change", function() {
+        //получаем элемент на котором происходит событие change
+        //this.value --> persons.value
+        personsSum = +this.value; 
+        total = (daysSum + personsSum) * 4000; 
+        /*Стоимость общей поездки за определенное 
+        кол-во людей на определенное кол-во дней*/
+        if(restDays.value == "") {
+            totalValue.innerHTML = 0;
+        } else if(persons.value == ""){
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+    restDays.addEventListener("change", function() {
+        //получаем элемент на котором происходит событие change
+        //this.value --> restDays.value
+        daysSum = +this.value; 
+        total = (daysSum + personsSum) * 4000; 
+        /*Стоимость общей поездки за определенное 
+        кол-во людей на определенное кол-во дней*/
+        if(persons.value == "") {
+            totalValue.innerHTML = 0;
+        } else if(restDays.value == ""){
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+    place.addEventListener("change", function() {
+        if(restDays.value == "" || persons.value == "") {
+            totalValue.innerHTML = 0;
+        } else {
+            let a = total; //техническая переменная для редактирования общей суммы
+            //Обращаемся к определенному option и выбираем его свойство value
+            totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+        }
+    });
 
 });
